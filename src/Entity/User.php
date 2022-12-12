@@ -60,6 +60,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Product::class, inversedBy: 'favorisUser')]
     private Collection $favoris;
 
+    #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private ?Cart $cart = null;
+
     public function __construct()
     {
         $this->createdAt = new DateTimeImmutable();
@@ -283,6 +286,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeFavori(Product $favori): self
     {
         $this->favoris->removeElement($favori);
+
+        return $this;
+    }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(?Cart $cart): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($cart === null && $this->cart !== null) {
+            $this->cart->setUser(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($cart !== null && $cart->getUser() !== $this) {
+            $cart->setUser($this);
+        }
+
+        $this->cart = $cart;
 
         return $this;
     }
