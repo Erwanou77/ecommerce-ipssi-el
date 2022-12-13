@@ -7,10 +7,10 @@
 	<h1>Product index</h1>
 
 	<div class="flex flex-row flex-wrap justify-center">
-		{% include "content/inc/_cardsProd.html.twig" %}
+		{% include "inc/_cardsProd.html.twig" %}
 	</div>
 	<div class="text-center">
-		{{ knp_pagination_render(products, 'content/_paginator.html.twig')}}
+		{{ knp_pagination_render(products, 'inc/_paginator.html.twig')}}
 	</div>
 
 	<a href="{{ path('app_product_create') }}">Create new</a>
