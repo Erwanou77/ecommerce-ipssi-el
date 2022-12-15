@@ -1,4 +1,4 @@
-<nav class="bg-white border-gray-200 px-2 sm:px-4 py-2.5 rounded dark:bg-gray-900">
+<nav class="bg-white border-gray-200 px-2 sm:px-4 w-full top-0 py-2.5 rounded dark:bg-gray-900 fixed">
 	<div class="container flex flex-wrap items-center justify-between mx-auto">
 		<a href="{{ path('app_home') }}" class="flex items-center">
 			<img src="/img/logoMeubles.jpg" class="h-6 mr-3 sm:h-9" alt=""/>
@@ -19,10 +19,7 @@
 					<a href="{{ path('app_products') }}" class="linkNav">Produits</a>
 				</li>
 				<li>
-					<a href="#" class="linkNav">Services</a>
-				</li>
-				<li>
-					<a href="#" class="linkNav">Pricing</a>
+					<a href="{{ path('app_profil') }}" class="linkNav">Profil</a>
 				</li>
 				{% if app.user %}
 					<li>
@@ -33,6 +30,11 @@
 						<a href="{{ path('app_login')}}" class="linkNav">Connexion</a>
 					</li>
 				{% endif %}
+				<li>
+					<a href="{{ path('app_cart')}}" class="linkNav">
+						<i class="fa-solid fa-cart-shopping"></i>
+					</a>
+				</li>
 			</ul>
 		</div>
 	</div>
