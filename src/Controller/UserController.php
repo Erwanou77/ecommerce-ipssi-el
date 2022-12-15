@@ -2,10 +2,17 @@
 
 namespace App\Controller;
 
+use App\Entity\Cart;
+use App\Entity\CartsProducts;
 use App\Entity\User;
+use App\Form\ProfilType;
 use App\Form\RegistrationFormType;
+use App\Repository\ProductRepository;
+use App\Repository\UserRepository;
 use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
+use Stripe\StripeClient;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -45,6 +52,8 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $cart = new Cart();
+            $user->setCart($cart);
             // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
@@ -67,5 +76,74 @@ class UserController extends AbstractController
         return $this->render('security/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+    }
+
+    #[Route('/profil', name: 'app_profil')]
+    public function profil(ProductRepository $productRepository, Request $request, PaginatorInterface $paginator): Response
+    {
+        $data = $productRepository->findBy(['seller' => $this->getUser()]);
+        $product = $paginator->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            6
+        );
+        return $this->render('security/profil.html.twig', [
+            'products' => $product
+        ]);
+    }
+
+    #[Route('/votre-panier', name: 'app_cart')]
+    public function cart(): Response
+    {
+        $user = $this->getUser();
+        $cart = $user->getCart();
+        $cartProducts = $cart->getCartsProducts()->toArray();
+
+        $quantities = [];
+        foreach ($cartProducts as $product) {
+            array_push($quantities, $product->getQuantity() * $product->getProduct()->getPrice());
+        }
+        $totalPrice = array_sum($quantities);
+        return $this->render('security/profil/cart.html.twig', [
+            'cartProducts' => $cartProducts,
+            'total' => $totalPrice
+        ]);
+    }
+
+    #[Route('/profil/edit', name: 'app_profil_edit')]
+    public function editProfil(Request $request, UserRepository $userRepository): Response
+    {
+        $user = $this->getUser();
+        $form = $this->createForm(ProfilType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $userRepository->save($user, true);
+
+            return $this->redirectToRoute('app_profil', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('security/editProfil.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/profil/checkout={total}', name: 'app_profil_checkout')]
+    public function cartCheckout($total)
+    {
+        // $currentUser = $this->getUser()->getId();
+
+        // if ($currentUser !== $user->getId()) {
+        //     return $this->redirectToRoute('app_profil');
+        // }
+        $stripe = new StripeClient($this->getParameter('stripe_sk'));
+        $stripe->paymentIntents->create(
+            [
+                'amount' => $total,
+                'currency' => 'eur',
+                'automatic_payment_methods' => ['enabled' => true],
+            ]
+        );
+        return $this->render('security/checkout.html.twig');
     }
 }
