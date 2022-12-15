@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProfilController!
+{% endblock %}
+
+{% block body %}
+	<div class="flex justify-center min-h-screen items-center">
+		<div class="p-10 bg-white rounded-xl drop-shadow-lg space-y-5">
+			{{ include('inc/_form.html.twig', {'button_label': 'Modifier'}) }}
+		</div>
+	</div>
+{% endblock %}

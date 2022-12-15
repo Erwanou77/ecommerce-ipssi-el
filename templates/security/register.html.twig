@@ -5,18 +5,30 @@
 
 {% block body %}
 	<h1>Register</h1>
-
-	{{ form_start(registrationForm) }}
-	{{ form_row(registrationForm.firstname) }}
-	{{ form_row(registrationForm.lastname) }}
-	{{ form_row(registrationForm.email) }}
-	{{ form_row(registrationForm.plainPassword.first, {
-        label: 'Premier password'
+	<div class="flex justify-center min-h-screen items-center">
+		<div class="p-10 bg-white rounded-xl drop-shadow-lg space-y-5">
+			{{ form_start(registrationForm) }}
+			{{ form_row(registrationForm.firstname) }}
+			{{ form_row(registrationForm.lastname) }}
+			{{ form_row(registrationForm.email) }}
+			{{ form_row(registrationForm.plainPassword.first, {
+        label: 'Premier password',
+		attr: {
+			class: 'input'
+		}
     }) }}
-	{{ form_row(registrationForm.plainPassword.second, {
-        label: 'Deuxième password'
+			{{ form_row(registrationForm.plainPassword.second, {
+        label: 'Deuxième password',
+		attr: {
+			class: 'input'
+		}
     }) }}
-
-	<button type="submit" class="btn">Register</button>
-	{{ form_end(registrationForm) }}
+			<div class="text-center mt-3">
+				<button type="submit" class="button">Register</button>
+			</div>
+			{{ form_end(registrationForm) }}
+			<p>Vous avez déjà un compte ?<br/><a href="{{ path('app_login')}}" class="underline text-blue-400">Connectez-vous</a>
+			</p>
+		</div>
+	</div>
 {% endblock %}
