@@ -22,6 +22,11 @@
 					<a href="{{ path('app_profil') }}" class="linkNav">Profil</a>
 				</li>
 				{% if app.user %}
+					{% if is_granted('ROLE_ADMIN') %}
+						<li>
+							<a href="{{ path('admin')}}" class="linkNav">Admin</a>
+						</li>
+					{% endif %}
 					<li>
 						<a href="{{ path('app_logout')}}" class="linkNav">Déconnexion</a>
 					</li>
