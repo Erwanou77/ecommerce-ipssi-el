@@ -10,6 +10,7 @@ import "./styles/app.css";
 
 // start the Stimulus application
 import "./bootstrap";
+import "./checkout";
 
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "@fortawesome/fontawesome-free/js/all.js";

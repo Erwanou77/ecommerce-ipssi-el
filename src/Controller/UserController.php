@@ -7,6 +7,7 @@ use App\Entity\CartsProducts;
 use App\Entity\User;
 use App\Form\ProfilType;
 use App\Form\RegistrationFormType;
+use App\Repository\CartsProductsRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
 use App\Security\UserAuthenticator;
@@ -110,6 +111,14 @@ class UserController extends AbstractController
         ]);
     }
 
+    #[Route('/cart/{id}/delete', name: 'app_cart_delete')]
+    public function deleteCart(CartsProducts $cartsProducts, CartsProductsRepository $cartsProductsRepository)
+    {
+        $cartsProductsRepository->remove($cartsProducts, true);
+
+        return $this->redirectToRoute('app_cart');
+    }
+
     #[Route('/profil/edit', name: 'app_profil_edit')]
     public function editProfil(Request $request, UserRepository $userRepository): Response
     {
@@ -136,14 +145,17 @@ class UserController extends AbstractController
         // if ($currentUser !== $user->getId()) {
         //     return $this->redirectToRoute('app_profil');
         // }
-        $stripe = new StripeClient($this->getParameter('stripe_sk'));
-        $stripe->paymentIntents->create(
-            [
-                'amount' => $total,
-                'currency' => 'eur',
-                'automatic_payment_methods' => ['enabled' => true],
-            ]
-        );
+        if ($_POST) {
+            $stripe = new \Stripe\StripeClient($this->getParameter('stripe_sk'));
+            $stripe->paymentIntents->create(
+                [
+                    'amount' => $total,
+                    'currency' => 'eur',
+                    'automatic_payment_methods' => ['enabled' => true],
+                ]
+            );
+        }
+
         return $this->render('security/checkout.html.twig');
     }
 }

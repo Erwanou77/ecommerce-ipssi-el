@@ -3,8 +3,8 @@
 {% block body %}
 	<div class="min-w-screen min-h-screen flex flex-col items-center justify-center px-5 py-5">
 		<h1 class="text-3xl font-bold pb-4">Votre panier</h1>
-		<div class="bg-gray-200 p-6 rounded flex gap-8 w-11/12 justify-between">
-			<div class="w-8/12">
+		<div class="bg-gray-200 p-6 rounded flex sm:gap-8 flex-col md:flex-row w-11/12 justify-between">
+			<div class="md:w-8/12 w-full">
 				{% for cartProduct in cartProducts %}
 					<div class="flex mb-6 justify-between">
 
@@ -14,18 +14,22 @@
 							<p>{{ cartProduct.quantity }}</p>
 							<p>{{ cartProduct.product.price }}€</p>
 						</div>
-						<h4>windows</h4>
+						<div>
+							<a href="{{ path('app_cart_delete', {'id': cartProduct.id })}}">
+								<i class="fa-solid fa-xmark"></i>
+							</a>
+						</div>
 					</div>
 				{% else %}
 					<h1>Vous n'avez aucun produit dans le panier</h1>
 				{% endfor %}
 			</div>
-			<div class="w-4/12">
+			<div class="md:w-4/12 w-full">
 				<div class="bg-white rounded p-4">
 					<p>Total du panier :
-						{{ total }}
+						{{ total }}€
 					</p>
-					<div class="text-center mt-3">
+					<div class="text-center mt-4">
 						<a href="{{ path('app_profil_checkout', {'total': total})}}" class="button">Passer au paiement</a>
 					</div>
 				</div>
