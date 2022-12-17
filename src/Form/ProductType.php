@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -26,34 +27,36 @@ class ProductType extends AbstractType
                 ]
             ])
             ->add('excerpt', TextType::class, [
-                "label" => "",
+                "label" => "descriptif",
                 "attr" => [
                     "class" => "input",
-                ]
+                ],
+                "required" => false,
             ])
-            ->add('description', TextareaType::class, [
+            ->add('description', CKEditorType::class, [
                 "label" => "",
-                "attr" => [
-                    "class" => "input",
-                ]
+                "required" => false,
             ])
             ->add('image', TextType::class, [
                 "label" => "",
                 "attr" => [
                     "class" => "input",
-                ]
+                ],
+                "required" => false,
             ])
             ->add('quantity', IntegerType::class, [
                 "label" => "Quantité",
                 "attr" => [
                     "class" => "input",
-                ]
+                ],
+                "required" => false,
             ])
             ->add('price', NumberType::class, [
                 "label" => "Prix",
                 "attr" => [
                     "class" => "input",
-                ]
+                ],
+                "required" => false,
             ])
             ->add('statut', ChoiceType::class, [
                 "label" => "Status",
@@ -63,7 +66,8 @@ class ProductType extends AbstractType
                 ],
                 "attr" => [
                     "class" => "input",
-                ]
+                ],
+                "required" => false,
             ])
             ->add('category', EntityType::class, [
                 "class" => Category::class,
@@ -72,12 +76,14 @@ class ProductType extends AbstractType
                 "attr" => [
                     "class" => "input",
                 ],
+                "required" => false,
             ])
             ->add('sold', IntegerType::class, [
                 "label" => "Promotions",
                 "attr" => [
                     "class" => "input"
                 ],
+                "required" => false,
             ]);
     }
 

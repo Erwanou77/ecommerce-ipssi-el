@@ -18,10 +18,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class ContentController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(): Response
+    public function index(ProductRepository $productRepository): Response
     {
         return $this->render('content/home.html.twig', [
-            'controller_name' => 'ContentController',
+            'products' => $productRepository->findBy([], ['sold' => 'DESC'], 3),
         ]);
     }
 

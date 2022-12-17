@@ -16,10 +16,12 @@ class ActionController extends AbstractController
     public function create(Request $request, ProductRepository $productRepository): Response
     {
         $product = new Product();
+        $user = $this->getUser();
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $product->setSeller($user);
             $productRepository->save($product, true);
 
             return $this->redirectToRoute('app_products', [], Response::HTTP_SEE_OTHER);
@@ -34,6 +36,11 @@ class ActionController extends AbstractController
     #[Route('/product/{id}/update', name: 'app_product_update', methods: ['GET', 'POST'])]
     public function edit(Request $request, Product $product, ProductRepository $productRepository): Response
     {
+        if ($this->getUser()) {
+            if ($this->getUser() != $product->getSeller()) {
+                return $this->redirectToRoute('app_products');
+            }
+        }
         $form = $this->createForm(ProductType::class, $product);
         $form->handleRequest($request);
 

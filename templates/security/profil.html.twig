@@ -20,15 +20,15 @@
 							<span class="text-yellow-300">'{{ app.user.firstname ~ ' ' ~ app.user.lastname }}'</span>,</p>
 						<p>&nbsp;&nbsp;&nbsp;&nbsp;phoneNumber:
 							<span class="text-yellow-300">'{{ app.user.phoneNumber }}'</span>,</p>
-						<p>&nbsp;&nbsp;&nbsp;&nbsp;website:
-							<span class="text-yellow-300">'<a href="https://launayerwan.fr" target="_blank" class="text-yellow-300 hover:underline focus:border-none">https://launayerwan.fr</a>'</span>,</p>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;address:
+							<span class="text-yellow-300">'{{ app.user.address }}'</span>,</p>
 						<p>&nbsp;&nbsp;}</p>
 						<p>}</p>
 					</div>
 				</div>
 				<div class="mt-8 flex flex-col">
 					<a href="{{ path('app_profil_edit')}}" class="button">Modifier votre profil</a>
-					<a href="" class="button mt-6">Test</a>
+					<a href="{{ path('app_product_create')}}" class="button mt-6">Créer un produit</a>
 				</div>
 			</div>
 			<div class="flex flex-row flex-wrap justify-center">

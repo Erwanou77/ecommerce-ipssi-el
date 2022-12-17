@@ -18,10 +18,11 @@
 				<li>
 					<a href="{{ path('app_products') }}" class="linkNav">Produits</a>
 				</li>
-				<li>
-					<a href="{{ path('app_profil') }}" class="linkNav">Profil</a>
-				</li>
 				{% if app.user %}
+					<li>
+						<a href="{{ path('app_profil') }}" class="linkNav">Profil</a>
+					</li>
+
 					{% if is_granted('ROLE_ADMIN') %}
 						<li>
 							<a href="{{ path('admin')}}" class="linkNav">Admin</a>
@@ -30,16 +31,16 @@
 					<li>
 						<a href="{{ path('app_logout')}}" class="linkNav">Déconnexion</a>
 					</li>
+					<li>
+						<a href="{{ path('app_cart')}}" class="linkNav">
+							<i class="fa-solid fa-cart-shopping"></i>
+						</a>
+					</li>
 				{% else %}
 					<li>
 						<a href="{{ path('app_login')}}" class="linkNav">Connexion</a>
 					</li>
 				{% endif %}
-				<li>
-					<a href="{{ path('app_cart')}}" class="linkNav">
-						<i class="fa-solid fa-cart-shopping"></i>
-					</a>
-				</li>
 			</ul>
 		</div>
 	</div>

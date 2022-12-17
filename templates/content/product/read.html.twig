@@ -9,44 +9,8 @@
 	<table class="table">
 		<tbody>
 			<tr>
-				<th>Id</th>
-				<td>{{ product.id }}</td>
-			</tr>
-			<tr>
-				<th>Name</th>
-				<td>{{ product.name }}</td>
-			</tr>
-			<tr>
-				<th>Excerpt</th>
-				<td>{{ product.excerpt }}</td>
-			</tr>
-			<tr>
 				<th>Description</th>
 				<td>{{ product.description }}</td>
-			</tr>
-			<tr>
-				<th>Image</th>
-				<td>{{ product.image }}</td>
-			</tr>
-			<tr>
-				<th>Quantity</th>
-				<td>{{ product.quantity }}</td>
-			</tr>
-			<tr>
-				<th>Price</th>
-				<td>{{ product.price }}</td>
-			</tr>
-			<tr>
-				<th>Statut</th>
-				<td>{{ product.statut }}</td>
-			</tr>
-			<tr>
-				<th>CreatedAt</th>
-				<td>{{ product.createdAt ? product.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-			</tr>
-			<tr>
-				<th>UpdatedAt</th>
-				<td>{{ product.updatedAt ? product.updatedAt|date('Y-m-d H:i:s') : '' }}</td>
 			</tr>
 			<tr>
 				<th>Sold</th>
@@ -54,11 +18,39 @@
 			</tr>
 		</tbody>
 	</table>
-	{{ include('inc/_form.html.twig', {'button_label': 'Ajouter au panier'}) }}
 
 	<a href="{{ path('app_products') }}">back to list</a>
-
-	<a href="{{ path('app_product_update', {'id': product.id}) }}">edit</a>
-
-	{{ include('inc/_delete_form.html.twig') }}
+	<div class="w-4/5 mx-auto min-h-screen">
+		<div class="flex justify-around items-center mb-3">
+			<div>
+				<img src="{{ product.image }}" alt="">
+			</div>
+			<div>
+				<h2>{{ product.name }}</h2>
+				<div class="flex items-center">
+					{% if product.statut == 0 %}
+						<span class="bg-red-400 text-red-700 px-2.5 py-0.5 rounded">Indisponible</span>
+					{% elseif product.statut == 1 %}
+						<span class="bg-green-400 text-green-700 px-2.5 py-0.5 rounded">Disponible</span>
+					{% endif %}
+					<h3>{{ product.price }}€</h3>
+				</div>
+				<h5>{{ product.quantity }}</h5>
+				<div class="">
+					{{ include('inc/_form.html.twig', {'button_label': 'Ajouter au panier'}) }}
+				</div>
+			</div>
+		</div>
+		<div>
+			<p>{{ product.description|raw }}</p>
+			<div class="flex gap-4 justify-center items-center">
+				{% if app.user %}
+					{% if app.user == product.seller %}
+						<a href="{{ path('app_product_update', {'id': product.id}) }}" class="button">edit</a>
+						{{ include('inc/_delete_form.html.twig') }}
+					{% endif %}
+				{% endif %}
+			</div>
+		</div>
+	</div>
 {% endblock %}
